@@ -5,6 +5,9 @@ import { AppComponent } from './app.component';
 import { FabricjsEditorModule } from 'projects/angular-editor-fabric-js/src/public-api';
 import { FormsModule } from '@angular/forms';
 import { ColorPickerModule } from 'ngx-color-picker';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 
 @NgModule({
   declarations: [
@@ -13,6 +16,8 @@ import { ColorPickerModule } from 'ngx-color-picker';
   imports: [
     BrowserModule,
     FabricjsEditorModule,
+    ImageCropperModule,
+    NgbModule,
     FormsModule,
     ColorPickerModule
   ],

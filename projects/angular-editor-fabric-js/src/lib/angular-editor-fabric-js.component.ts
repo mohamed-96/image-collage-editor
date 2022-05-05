@@ -30,7 +30,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
   public url: string | ArrayBuffer = '';
   public size: any = {
     width: 500,
-    height: 800
+    height: 500
   };
 
   public json: any;
@@ -49,7 +49,7 @@ export class FabricjsEditorComponent implements AfterViewInit {
       hoverCursor: 'pointer',
       selection: true,
       selectionBorderColor: 'blue',
-      isDrawingMode: true
+      isDrawingMode: false
     });
 
     this.canvas.on({
@@ -143,21 +143,23 @@ export class FabricjsEditorComponent implements AfterViewInit {
 
   // Block "Add images"
 
-  getImgPolaroid(event: any) {
+  getImgPolaroid(src: any) {
     const el = event.target;
-    fabric.loadSVGFromURL(el.src, (objects, options) => {
-      const image = fabric.util.groupSVGElements(objects, options);
-      image.set({
+    // console.log('el.src: ', el.src);
+    fabric.Image.fromURL(src, (myImage) => {
+      myImage.set({
         left: 10,
         top: 10,
         angle: 0,
         padding: 10,
         cornerSize: 10,
+        scaleX: 0.4,
+        scaleY: 0.4,
         hasRotatingPoint: true,
       });
-      this.extend(image, this.randomId());
-      this.canvas.add(image);
-      this.selectItemAfterAdded(image);
+      this.extend(myImage, this.randomId());
+      this.canvas.add(myImage);
+      this.selectItemAfterAdded(myImage);
     });
   }
 
@@ -180,6 +182,9 @@ export class FabricjsEditorComponent implements AfterViewInit {
         this.canvas.add(image);
         this.selectItemAfterAdded(image);
       });
+
+
+
     }
   }
 

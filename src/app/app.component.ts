@@ -1,5 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FabricjsEditorComponent } from 'projects/angular-editor-fabric-js/src/public-api';
+import { ImageCroppedEvent, LoadedImage } from 'ngx-image-cropper';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +10,13 @@ import { FabricjsEditorComponent } from 'projects/angular-editor-fabric-js/src/p
 })
 export class AppComponent {
   title = 'angular-editor-fabric-js';
-
+  croppedImage: any = '';
+  imageBase64: any;
+  closeResult = '';
   @ViewChild('canvas', { static: false }) canvas: FabricjsEditorComponent;
+
+  constructor(private modalService: NgbModal) { }
+
 
   public rasterize() {
     this.canvas.rasterize();
@@ -142,4 +149,41 @@ export class AppComponent {
   public drawMode() {
     this.canvas.drawingMode();
   }
+
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+
+
+  async setCropperImage(url: string) {
+    const result: any = await fetch(url);
+    const blob = await result.blob();
+    let reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onload = () => {
+      console.log(reader.result);
+      this.imageBase64 = reader.result;
+    }
+  }
+
+
+  openCropModal(content:any, url:string) {
+    this.setCropperImage(url);
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' });
+  }
+
+  save() {
+    this.getImgPolaroid(this.imageBase64);
+    this.modalService.dismissAll();
+  }
+
+  saveAndCrop() {
+    this.getImgPolaroid(this.croppedImage);
+    this.modalService.dismissAll()
+  }
+
+
+
+
 }
